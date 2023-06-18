@@ -15,12 +15,12 @@ both minimizes response time (i.e T(first run) - T(arrival)) for interactive job
 
 ## Basic Rules of MLFQ 
 The MLFQ has a number of distinct **queues**, each assigned a different **priority level**. At any given timne, a job that is ready to run is on a single queue. 
-MLFQ used priorities to decide which job should run at a given time. A job with a higher priority (i.e, a job on a higher queue) is chosen to run. Of course, more
-than one job may be on a given queue, and this have the  **same** priority. In this case, we will just use round-robin scheduling among those jobs. The key to MLFQ
-scheduling lies in how the scheduler establishes priorities. Rather than giving  fixed priority  to each job, MLFQ ***varies*** the priority of a job based on its
+MLFQ uses priorities to decide which job should run at a given time. A job with a higher priority (i.e, a job on a higher queue) is chosen to run. Of course, more
+than one job may be on a given queue, and thus have the  **same** priority. In this case, we will just use round-robin scheduling among those jobs. The key to MLFQ
+scheduling lies in how the scheduler establishes priorities. Rather than giving fixed priority to each job, MLFQ ***varies*** the priority of a job based on its
 observed behavior. If, for example, a job repeatedly relinquishes the CPU while waiting for input from the keyboard, MLFQ will keep its priority high, as this is how
 an interactive process might behave. If, instead, a job uses the CPU intensively for long periods of time, MLFQ will reduce its priority. In this way, the algorithm
-will try to lean about processes as they run, and thus use the ****history*** of the job to predict its future behavior.
+will try to lean about processes as they run, and thus use the ***history*** of the job to predict its future behavior.
    The two basic rules of the for MLFQ are:
    - If Priority(A) > Priority(B), A runs and B doesn't.
    - If Priority(A) = Priority(B), A and B run in RR (round robin)
