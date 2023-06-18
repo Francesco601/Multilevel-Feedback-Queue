@@ -1,12 +1,12 @@
 # Multilevel-Feedback-Queue
 
 A Multilevel Feeback Queue (MLFQ) CPU scheduling algoritm is one of the most well-known approaches to CPU scheduling in operating systems. It was first described by 
-Corbato et al in 1962 in a system knownn as the Compatible Time-Sharing System and was later incorporated into Multics, the forerunner of Unix. The schedular has been
+Corbato et al in 1962 in a system known as the Compatible Time-Sharing System and was later incorporated into Multics, the forerunner of Unix. The schedular has been
 subsequently developed and refined thoughout the years into the implementations that you might encounter in some modern systems.
 
 The fundmamental problem that MLFQ tries to address is two-fold. First, it needs to optimize <em>turnaround time</em>, which is usually done most successsfuly by 
 running shorter jobs first. Unfortunaately, the OS doesn't generally know how long a job or process will run for, exactly the knowledge that algorithms like SJF
-(or STCF) require. Second of all, MLFQ needs to make a system feeel respomsive to interactive users (i..e users sitting and staring at the screen, waiting for a 
+(or STCF) require. Second of all, MLFQ needs to make a system feel respomsive to interactive users (i.e. users sitting and staring at the screen, waiting for a 
 process to finish) and thus minimize <em>response time</em>; unfortunately algorithms like Round Robin reduce response time but are horrible for turnaround time. So 
 the problem is: given that we in general do not know anything about a process, how can we build a CPU scheduler to acheive these goals? How can the scheduler learn.
 as the system is running, the characteristics of the jobs it is running, and theefore make better scheduling decisions? In short, how can we design a scheduler that
@@ -14,9 +14,9 @@ both minimizes response time (i.e T(first run) - T(arrival)) for interactive job
 <em>apriori</em> knowledge of job lengths?
 
 <H1> Basic Rules of MLFQ </H1>
-The MLFQ has a number of distinct <bold> queues </bold>, each assigned a different <bold>priority level</bold>. At any given timne, a job that is ready to run is on a single queue. 
+The MLFQ has a number of distinct **queues**, each assigned a different **priority level**. At any given timne, a job that is ready to run is on a single queue. 
 MLFQ used priorities to decide which job should run at a given time. A job with a higher priority (i.e, a job on a higher queue) is chosen to run. Of course, more
-than one job may be on a given queue, and this have the  **same*** priority. In this case, we will just use round-robin scheduling among those jobs. The key to MLFQ
+than one job may be on a given queue, and this have the  **same** priority. In this case, we will just use round-robin scheduling among those jobs. The key to MLFQ
 scheduling lies in how the scheduler establishes priorities. Rather than giving  fixed priority  to each job, MLFQ ***varies*** the priority of a job based on its
 observed behavior. If, for example, a job repeatedly relinquishes the CPU while waiting for input from the keyboard, MLFQ will keep its priority high, as this is how
 an interactive process might behave. If, instead, a job uses the CPU intensively for long periods of time, MLFQ will reduce its priority. In this way, the algorithm
