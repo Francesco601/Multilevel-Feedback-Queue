@@ -6,11 +6,11 @@ subsequently developed and refined thoughout the years into the implementations 
 
 The fundmamental problem that MLFQ tries to address is two-fold. First, it needs to optimize <em>turnaround time</em>, which is usually done most successsfuly by 
 running shorter jobs first. Unfortunaately, the OS doesn't generally know how long a job or process will run for, exactly the knowledge that algorithms like SJF
-(or STCF) require. Second of all, MLFQ needs to make a system feel respomsive to interactive users (i.e. users sitting and staring at the screen, waiting for a 
+(or STCF) require. Second of all, MLFQ needs to make a system feel responsive to interactive users (i.e. users sitting and staring at the screen, waiting for a 
 process to finish) and thus minimize <em>response time</em>; unfortunately algorithms like Round Robin reduce response time but are horrible for turnaround time. So 
-the problem is: given that we in general do not know anything about a process, how can we build a CPU scheduler to acheive these goals? How can the scheduler learn.
+the problem is: given that we in general do not know anything about a process, how can we build a CPU scheduler to acheive these goals? How can the scheduler learn,
 as the system is running, the characteristics of the jobs it is running, and theefore make better scheduling decisions? In short, how can we design a scheduler that
-both minimizes response time (i.e T(first run) - T(arrival)) for interactive jobs while also minimizing turnaround time (T(completion)-T(arrival)) without any
+both minimizes response time (i.e. T(first run) - T(arrival)) for interactive jobs while also minimizing turnaround time (T(completion)-T(arrival)) without any
 <em>apriori</em> knowledge of job lengths?
 
 ## Basic Rules of MLFQ 
@@ -20,8 +20,8 @@ than one job may be on a given queue, and thus have the  **same** priority. In t
 scheduling lies in how the scheduler establishes priorities. Rather than giving fixed priority to each job, MLFQ ***varies*** the priority of a job based on its
 observed behavior. If, for example, a job repeatedly relinquishes the CPU while waiting for input from the keyboard, MLFQ will keep its priority high, as this is how
 an interactive process might behave. If, instead, a job uses the CPU intensively for long periods of time, MLFQ will reduce its priority. In this way, the algorithm
-will try to lean about processes as they run, and thus use the ***history*** of the job to predict its future behavior.
-   The two basic rules of the for MLFQ are:
+will try to learn about processes as they run, and thus use the ***history*** of the job to predict its future behavior.
+   The two basic rules of the MLFQ are:
    - If Priority(A) > Priority(B), A runs and B doesn't.
    - If Priority(A) = Priority(B), A and B run in RR (round robin)
 
@@ -30,7 +30,7 @@ What we need to understand is how job priority changes over time. Here is a firs
   - If a job uses up an entire time slice or quantum while running, itspriority is ***reduced*** (i.e, it moves down one queue).
   - If a job gives up the CPU before the time slice is up, it stays at the same priority level.
 
-Let's think about a somewhat co mplicated example to see how MLFQ tries to approximate SJF. In this example, there are two jobs: A, which is a long-running CPU intensive
+Let's think about a somewhat complicated example to see how MLFQ tries to approximate SJF. In this example, there are two jobs: A, which is a long-running CPU intensive
 job, and B, which is a short-running interactive job. Assume A has been running for some time, and then B arrives. What will happen? A is running along in the lowest
 prioirty queue (as would any long-running CPU-intensive jobs); B arrives, say, at time T=100, and thus is inserted into the highest queue. Since its run time is short
 (only say 20ms), B completes before reaching the bottom queue, in two time slices; then A resumes running (at low priority).
@@ -39,7 +39,7 @@ job, it first ***assumes*** it will be a short job and gives it high priority. I
 it will slowly move down the queues, and thus prove itself  to be a long-running more batch-like process. In this manner, MLFQ approximates Shortest Job First.
 
 We can thus have a basic MLFQ algorithm. It seems to do a fairly good job, sharing the CPU fairly between long-running jobs, and letting short or I/O-intensive 
-interactive jobs run quickly. Unfortunately, this this approach has serious defects. First, there is the problem of **starvation**: if there are "too many" 
+interactive jobs run quickly. Unfortunately, this approach has serious defects. First, there is the problem of **starvation**: if there are "too many" 
 interactive jobs in the system, they will combine to consume ***all*** CPU time, and thus long-running jobs will never receieve any CPU time (they starve). We
 would like to make some progress on these jobs even in this scenario. Another problem is that a smart user could rewrite their program to **game the scheduler**. 
 Gaming the scheduler generally refers to the idea of doing something sneaky to trick the scheduler into giving you more than your fair share of the resource. The
