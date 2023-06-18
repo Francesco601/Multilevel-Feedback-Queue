@@ -45,6 +45,54 @@ would like to make some progress on these jobs even in this scenario. Another pr
 Gaming the scheduler generally refers to the idea of doing something sneaky to trick the scheduler into giving you more than your fair share of the resource. The
 algorithm so far described is vulnerable to the following attack: before the time slice (quantum) is over, issue an I/O operation to some file you don't cate about
 and thus relinquish the CPU. Doing so allows you to remain in the same queue and thus gain a higher percentage of CPU time. When done right (for example, by running
-for 99% of a time slice before giving up the CPU), a job could nearly monoplize the CPU.And, finally, a program may change its behavior over time
+for 99% of a time slice before giving up the CPU), a job could nearly monoplize the CPU.And, finally, a program may change its behavior over time: what was CPU-bound may transition to a phase of interactivity. With our current approach, such a job would be out of luck and not be treated like the other interactive jobs in the system,
+
+We can change the rules to avoid the problem of starvation. What can be done in order to assure that CPU-bound jobs
+will make some progress (even if it is not much?). The simple idea is to periodically boost the priority of all the
+jobs in the system. There are many ways to acheive this but the simplest is probably to throw them all into the topmost
+queue.
+  - After some period of time S. move all the jobs in the system to the topmost queue.
+
+This new rule solves two problems at once. First, processes are assured not the starve: by sitting in the top queue, a
+job will share the CPU with other high-prioirity jobs in a round-robin fashion, and eventually receive service. Second.
+if a CPU-bounded job has become interactive, the scheduler treats it properly once it has received the priority boost.
+
+Now there is one more problem to solve: how to prvent gaming of the scheduler. The real culprit here are the rules which let a job retain its priority by giving up the CPU before the time slice expires. What can be done? The solution
+here is to perform better **accounting** of CPU time at each level of the MLFQ. Instead of forgetting how much of a 
+time slice a process used at a given level, the scheduler should keep track; once a process has used its allotment, it
+is demoted to the next priority queue. Whether it uses the time slice in one long burst or many small ones does not
+matter. We can adopt the new rule:c
+   - Once a job uses up its time allottment at a given level (regardless of how many times is has given up the CPU), its priority is reduced (i.e it moved down one queue).
+
+ Whereas the multilevel queue algorithm keeps processes permanently assigned to their initial queue assignments, the
+ Mutlilevel Feedback Queue shifts processes between queues. The shift is dependent on the CPU bursts of prior 
+ time-slices
+    - If a process uses too much CPU time, it will be moved to a lower-priority queue.
+    - If a process is I/O bound or an interactive process, it will be moved to a higher-priority queue.
+    - If a process is waiting too long in a low-priority queue and starving, it will be aged to a higher-priority queue.
+
+ <H2>Algorithm</H2>
+    
+    Multiple FIFO queues are used and the operation is as follows:
+     1) a new process is inserted at the tail of the top-level FIFO queue.
+     2) at some stage the process reaches the head of the queue and is assigned the CPU.
+     3) if the process is completed within the time-slice of the given queue, it leaves the system.
+     4) if the process voluntarily relinquishes control of the CPU, it leaves the queueing network, and when the 
+      process becomes ready again it is inserted at the tail of the same queue which is gave up earlier-
+     5) If the process uses all the quantum time, it is pre-empted and inserted at the end of the next lower
+     level queue. This next lower level queue will have a time quantum which is more than that of the previous
+     higher-level queue.
+     6) This scheme will continue until the process completes or it reaches the base level queue.
+      - At the base level queue the processes circulate in round-robin fashion until they complete and
+      leave the system. Processes in the base level queue can also be scheduled on a FCFS basis.
+      - Optionally, if a process blocks for I/O, it is "promoted" one level, and placed at the end of the next
+      higher-level queue. This allows I/O bound processes to be favored by the scheduler and allows processes to
+      "escape" the base level queue.
+ 
+
+     
+ 
+ 
+
 
 
