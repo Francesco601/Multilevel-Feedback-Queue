@@ -13,7 +13,7 @@ as the system is running, the characteristics of the jobs it is running, and the
 both minimizes response time (i.e T(first run) - T(arrival)) for interactive jobs while also minimizing turnaround time (T(completion)-T(arrival)) without any
 <em>apriori</em> knowledge of job lengths?
 
-<H1> Basic Rules of MLFQ </H1>
+## Basic Rules of MLFQ 
 The MLFQ has a number of distinct **queues**, each assigned a different **priority level**. At any given timne, a job that is ready to run is on a single queue. 
 MLFQ used priorities to decide which job should run at a given time. A job with a higher priority (i.e, a job on a higher queue) is chosen to run. Of course, more
 than one job may be on a given queue, and this have the  **same** priority. In this case, we will just use round-robin scheduling among those jobs. The key to MLFQ
