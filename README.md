@@ -89,7 +89,10 @@ matter. We can adopt the new rule:c
       higher-level queue. This allows I/O bound processes to be favored by the scheduler and allows processes to
       "escape" the base level queue.
  
-
+#### Sources
+<a href="https://os.ecci.ucr.ac.cr/slides/Abraham-Silberschatz-Operating-System-Concepts-10th-2018.pdf"> Operating System Concepts </a> Silberschatz, Galvin and Gagne
+<a href="https://drdineshsharma.com/Operating%20Systems.pdf"> Three Easy Pieces </a> Renzi Arpaci-Dusseaa and Andrea Arpaci-Dusseau
+<a href="https://en.wikipedia.org/wiki/Multilevel_feedback_queue"> Multilevel Feedback Queue </a> Wikipedia
      
  
  
