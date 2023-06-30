@@ -78,7 +78,7 @@ matter. We can adopt the new rule:c
      2) at some stage the process reaches the head of the queue and is assigned the CPU.
      3) if the process is completed within the time-slice of the given queue, it leaves the system.
      4) if the process voluntarily relinquishes control of the CPU, it leaves the queueing network, and when the 
-      process becomes ready again it is inserted at the tail of the same queue which is gave up earlier-
+      process becomes ready again it is inserted at the tail of the same queue which is gave up earlier.
      5) If the process uses all the quantum time, it is pre-empted and inserted at the end of the next lower
      level queue. This next lower level queue will have a time quantum which is more than that of the previous
      higher-level queue.
