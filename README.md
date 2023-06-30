@@ -1,6 +1,6 @@
 # Multilevel-Feedback-Queue
 
-A Multilevel Feeback Queue (MLFQ) CPU scheduling algoritm is one of the most well-known approaches to CPU scheduling in operating systems. It was first described by 
+A Multilevel Feeback Queue (MLFQ) CPU scheduling algorithm is one of the most well-known approaches to CPU scheduling in operating systems. It was first described by 
 Corbato et al in 1962 in a system known as the Compatible Time-Sharing System and was later incorporated into Multics, the forerunner of Unix. The scheduler has been
 subsequently developed and refined thoughout the years into the implementations that you might encounter in some modern systems.
 
